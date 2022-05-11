@@ -43,7 +43,6 @@ jobs:
         with:
           node-version: 14.17
           cache: 'yarn'
-          cache-dependency-path: '**/package-lock.json'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
