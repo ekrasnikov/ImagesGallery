@@ -8,12 +8,21 @@ on:
       environment:
         description: Environment
         required: true
-      version:
-        description: Version
+      access_key:
+        description: access
+        required: true
+      secret_key:
+        description: secret
+        required: true
+      region:
+        description: region
         required: true
 
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment || 'master' }}
+  AWS_ACCESS_KEY_ID: ${{ github.event.inputs.access_key || '123' }}
+  AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.secret_key || '123' }}
+  AWS_REGION: ${{ github.event.inputs.region || 'eu' }}
 
 jobs:
   deploy:
