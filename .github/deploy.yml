@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        required: true
+      version:
+        description: Version
+        required: true
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment || 'master' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.version || github.event.release.tag_name }}
+      - name: Fetch @action/get-parameters
+        uses: actions/checkout@v2
+        with:
+          repository: ekrasnikov/action-get-parameters
+          ref: refs/tags/v1.1.1
+          token: ${{ secrets.CI_PAT }}
+          path: .github/actions/get-parameters
+      - name: Fetch parameters
+        uses: ./.github/actions/get-parameters
+        with:
+          token: ${{ secrets.CI_PAT }}
+          key: ${{ secrets.ACTION_KEY }}
+      - name: Configure AWS Amplify
+        uses: ambientlight/amplify-cli-action@0.3.0
+        with:
+          amplify_command: configure
+          amplify_env: ${{ env.ENVIRONMENT }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy project
+        uses: ambientlight/amplify-cli-action@0.3.0
+        with:
+          amplify_command: publish
+          amplify_env: ${{ env.ENVIRONMENT }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }}

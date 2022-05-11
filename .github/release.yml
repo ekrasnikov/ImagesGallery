@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version or segment
+        required: false
+        default: patch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fetch @action/release
+        uses: actions/checkout@v2
+        with:
+          repository: ekrasnikov/action-release
+          ref: refs/tags/v1.0.0
+          token: ${{ secrets.CI_PAT }}
+          path: .github/actions/release
+      - name: Create release [${{ github.event.inputs.version }}]
+        uses: ./.github/actions/release
+        with:
+          version: ${{ github.event.inputs.version }}
+          token: ${{ secrets.CI_PAT }}
