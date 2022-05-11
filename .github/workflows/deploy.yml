@@ -42,7 +42,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14.17
+      - name: Install dependencies
+        run: ls -a && npm ci
       - name: Build
-        run: ls -a && npm install && npm run build
+        run: ls -a && npm run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
