@@ -41,10 +41,12 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 14.17
+          cache: 'yarn'
+          cache-dependency-path: '**/package-lock.json'
       - name: Install dependencies
-        run: npm install
+        run: yarn install --frozen-lockfile
       - name: Build
-        run: npm run build
+        run: yarn run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
