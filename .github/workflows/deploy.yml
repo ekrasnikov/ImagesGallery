@@ -17,36 +17,30 @@ on:
       region:
         description: region
         required: true
+      app_id:
+        description: region
+        required: true
 
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment || 'master' }}
   AWS_ACCESS_KEY_ID: ${{ github.event.inputs.access_key || '123' }}
   AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.secret_key || '123' }}
   AWS_REGION: ${{ github.event.inputs.region || 'eu' }}
+  APP_ID: ${{ github.event.inputs.app_id || 'eu' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS Amplify
-        uses: ambientlight/amplify-cli-action@0.3.0
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          amplify_command: configure
-          amplify_env: ${{ env.ENVIRONMENT }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: Install dependencies
         run: npm install
       - name: Build
         run: npm run build
       - name: Deploy project
-        uses: ambientlight/amplify-cli-action@0.3.0
-        with:
-          amplify_command: publish
-          amplify_env: ${{ env.ENVIRONMENT }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+        run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
