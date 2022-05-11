@@ -42,9 +42,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14.17
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
       - name: Build
-        run: cd .. && ls -a && yarn run build
+        run: yarn run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
