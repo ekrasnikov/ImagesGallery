@@ -43,6 +43,6 @@ jobs:
         with:
           node-version: 14.17
       - name: Build
-        run: ls -a && yarn install --frozen-lockfile && yarn run build
+        run: ls -a && npm install && npm run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
