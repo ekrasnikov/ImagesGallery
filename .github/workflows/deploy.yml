@@ -45,6 +45,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        run: ls -a
+        run: ls -a && yarn run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
