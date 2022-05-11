@@ -16,7 +16,7 @@ export const Panel: React.FC<PanelProps> = props => {
     
     const resetImageUrl = () => {
         setTag('');
-        props.onImg('', '')
+        props.onImg('')
     };
 
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
