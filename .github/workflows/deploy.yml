@@ -1,8 +1,6 @@
 name: Deploy
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       environment:
@@ -43,7 +41,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
+      - name: Install dependencies
+        run: npm install
       - name: Build
-        run: npm install && npm run build
+        run: npm run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}

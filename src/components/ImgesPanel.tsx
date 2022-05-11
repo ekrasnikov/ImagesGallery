@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {  } from 'react';
 
 
 type ImagePanelProps = {
@@ -10,7 +10,7 @@ export const ImagesPanel:  React.FC<ImagePanelProps> = ({urls}) => {
         <div>
             {urls.map(url => {
                 return (
-                    <img src={url}></img>
+                    <img src={url} alt='test'></img>
                 );
             })}
         </div>
