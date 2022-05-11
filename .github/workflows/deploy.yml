@@ -19,21 +19,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.version || github.event.release.tag_name }}
-      - name: Fetch @action/get-parameters
-        uses: actions/checkout@v2
-        with:
-          repository: ekrasnikov/action-get-parameters
-          ref: refs/tags/v1.1.1
-          token: ${{ secrets.CI_PAT }}
-          path: .github/actions/get-parameters
-      - name: Fetch parameters
-        uses: ./.github/actions/get-parameters
-        with:
-          token: ${{ secrets.CI_PAT }}
-          key: ${{ secrets.ACTION_KEY }}
       - name: Configure AWS Amplify
         uses: ambientlight/amplify-cli-action@0.3.0
         with:
