@@ -46,4 +46,4 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy project
-        run: aws amplify start-job --app-id ${{ env.APP_ID }} --branch-name ${{ env.ENVIRONMENT }}
+        run: aws amplify start-job --app-id ${{ env.APP_ID }} --branch-name ${{ env.ENVIRONMENT }} --job-type RELEASE
