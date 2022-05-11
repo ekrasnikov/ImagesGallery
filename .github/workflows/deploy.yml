@@ -31,9 +31,6 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -48,6 +45,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        run: yarn run build
+        run: cd .. && yarn run build
       - name: Deploy project
         run: aws amplify start-deployment --app-id --branch-name ${{ env.ENVIRONMENT }}
