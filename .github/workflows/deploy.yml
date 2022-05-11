@@ -31,6 +31,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ImagesGallery
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
