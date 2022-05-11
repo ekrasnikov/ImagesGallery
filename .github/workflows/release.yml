@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Fetch @action/release
+        uses: actions/checkout@v2
       - name: Create release [${{ github.event.inputs.version }}]
         uses: ./.github/actions/release
         with:
