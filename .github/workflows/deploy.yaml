@@ -11,7 +11,7 @@ on:
       aws_access_key_id:
         description: aws_access_key_id
         required: true
-      aws-secret-access-key:
+      aws_secret_access_key:
         description: aws-secret-access-key
         required: true
       aws_app_id:
@@ -20,8 +20,8 @@ on:
 
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
-  AWS_ACCESS_KEY_ID: ${{ github.event.inputs.environment || '' }}
-  AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.environment || '' }}
+  AWS_ACCESS_KEY_ID: ${{ github.event.inputs.aws_access_key_id || '' }}
+  AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.aws_secret_access_key || '' }}
   AMPLIFY_APP_ID: ${{ github.event.inputs.aws_app_id || '' }}
   AWS_REGION: 'eu-central-1'
 
