@@ -56,4 +56,4 @@ jobs:
           aws amplify start-job
           --app-id ${{ env.AMPLIFY_APP_ID }}
           --branch-name ${{ env.ENVIRONMENT }}
-          --job-type MANUAL
+          --job-type RELEASE
