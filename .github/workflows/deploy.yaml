@@ -48,7 +48,7 @@ jobs:
         run: yarn run build
       - name: Deploy project
         run: >-
-          aws amplify start-job
+          aws amplify start-job 
             --app-id ${{ env.AMPLIFY_APP_ID }} 
             --branch-name ${{ env.ENVIRONMENT }} 
             --job-type RELEASE
