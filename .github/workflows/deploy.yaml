@@ -53,7 +53,7 @@ jobs:
           aws s3 --region ${{ env.AWS_REGION }} cp project.zip s3://ek-file-dev --acl public-read
       - name: Deploy project
         run: >-
-          aws amplify start-job 
+          aws amplify start-deployment 
             --app-id ${{ env.AMPLIFY_APP_ID }} 
             --branch-name ${{ env.ENVIRONMENT }} 
-            --job-type RELEASE
+            --source-url s3://ek-file-dev/project.zip
