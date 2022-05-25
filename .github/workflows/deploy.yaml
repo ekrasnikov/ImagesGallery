@@ -46,14 +46,9 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         run: yarn run build
-      - name: Zip
-        run: zip -r project.zip .
-      - name: Upload
-        run: >-
-          aws s3 --region ${{ env.AWS_REGION }} cp project.zip s3://ek-file-dev --acl public-read
       - name: Deploy project
         run: >-
           aws amplify start-job
           --app-id ${{ env.AMPLIFY_APP_ID }}
           --branch-name ${{ env.ENVIRONMENT }}
-          --job-type MANUAL
+          --job-type RELEASE
