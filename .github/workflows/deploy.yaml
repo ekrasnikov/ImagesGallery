@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        required: true
+      aws_access_key_id:
+        description: aws_access_key_id
+        required: true
+      aws-secret-access-key:
+        description: aws-secret-access-key
+        required: true
+      aws_app_id:
+        description: aws_app_id
+        required: true
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
+  AWS_ACCESS_KEY_ID: ${{ github.event.inputs.environment || '' }}
+  AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.environment || '' }}
+  AMPLIFY_APP_ID: ${{ github.event.inputs.aws_app_id || '' }}
+  AWS_REGION: 'eu-central-1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.version || github.event.release.tag_name }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn run build
+      - name: Deploy project
+        run: >-
+          aws amplify start-deployment
+            --app-id ${{ env.AMPLIFY_APP_ID }} 
+            --branch-name ${{ env.ENVIRONMENT }} 
+            --job-type RELEASE
