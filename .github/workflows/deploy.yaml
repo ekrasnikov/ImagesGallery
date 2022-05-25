@@ -32,15 +32,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.version || github.event.release.tag_name }}
-      - name: configure amplify
-        uses: ambientlight/amplify-cli-action@0.3.0
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          amplify_command: configure
-          amplify_env: ${{ env.ENVIRONMENT }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -49,10 +46,14 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         run: yarn run build
+      - name: Zip
+        run: zip -r project.zip ./build ./node_modules
+      - name: Upload
+        run: >-
+          aws s3 --region ${{ env.AWS_REGION }} cp project.zip s3://ek-file-dev --acl public-read
       - name: Deploy project
-        uses: luisgreen/amplify_deployment@main
-        with:
-          appId: ${{ env.AMPLIFY_APP_ID }}
-          branchName: ${{ env.ENVIRONMENT }}
-          artifactPath: 'build'
-          region: ${{ env.AWS_REGION }}
+        run: >-
+          aws amplify start-job
+          --app-id ${{ env.AMPLIFY_APP_ID }}
+          --branch-name ${{ env.ENVIRONMENT }}
+          --job-type MANUAL
