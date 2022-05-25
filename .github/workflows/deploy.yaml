@@ -50,5 +50,4 @@ jobs:
         run: >-
           aws amplify start-deployment
             --app-id ${{ env.AMPLIFY_APP_ID }} 
-            --branch-name ${{ env.ENVIRONMENT }} 
-            --job-type RELEASE
+            --branch-name ${{ env.ENVIRONMENT }}
