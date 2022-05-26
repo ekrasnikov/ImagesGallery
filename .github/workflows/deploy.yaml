@@ -50,8 +50,9 @@ jobs:
         run: zip -r ${{ env.ENVIRONMENT }}.zip ./build ./node_modules
       - name: Upload
         run: >-
-          aws s3 --region ${{ env.AWS_REGION }} cp ${{ env.ENVIRONMENT }}.zip s3://test-bucket-dev-ek
-            --acl public-read
+          aws s3 cp ${{ env.ENVIRONMENT }}.zip s3://test-bucket-dev-ek
+          --acl public-read
+          --region ${{ env.AWS_REGION }}
       - name: Deploy project
         run: >-
           aws amplify start-job
