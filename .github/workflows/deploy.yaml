@@ -50,8 +50,8 @@ jobs:
         run: zip -r ${{ env.ENVIRONMENT }}.zip ./build ./node_modules
       - name: Upload
         run: >-
-          aws s3 
-            --region ${{ env.AWS_REGION }} cp ${{ env.ENVIRONMENT }}.zip s3://test-bucket-dev-ek 
+          aws s3 cp ${{ env.ENVIRONMENT }}.zip s3://test-bucket-dev-ek
+            --region ${{ env.AWS_REGION }}
             --acl public-read
       - name: Deploy project
         run: >-
