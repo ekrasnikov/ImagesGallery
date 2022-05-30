@@ -47,11 +47,10 @@ jobs:
       - name: Build
         run: yarn run build
       - name: Zip
-        run: zip -r ${{ env.ENVIRONMENT }}.zip ./build
+        run: zip -r ${{ env.ENVIRONMENT }}.zip ./build ./node_modules
       - name: Upload
         run: >-
           aws s3 cp ${{ env.ENVIRONMENT }}.zip s3://test-bucket-dev-ek
-          --acl public-read
           --region ${{ env.AWS_REGION }}
       - name: Deploy project
         run: >-
